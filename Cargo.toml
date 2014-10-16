@@ -1,0 +1,27 @@
+[package]
+
+name = "rust-gravity-worm-ii"
+version = "0.0.1"
+authors = ["Alex <alexchandel@gmail.com>"]
+readme = "README.md"
+tags = []
+
+[dependencies.piston]
+
+git = "https://github.com/pistondevelopers/piston.git"
+
+[dependencies.sdl2]
+
+git = "https://github.com/AngryLawyer/rust-sdl2.git"
+
+[dependencies.sdl2_game_window]
+
+git = "https://github.com/PistonDevelopers/sdl2_game_window.git"
+
+[dependencies.gfx]
+
+git = "https://github.com/gfx-rs/gfx-rs.git"
+
+[dependencies.gfx_graphics]
+
+git = "https://github.com/PistonDevelopers/gfx_graphics.git"
