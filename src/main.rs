@@ -37,6 +37,7 @@ use piston::input::{
 	Keyboard,
 	keyboard,
 };
+use piston::event::fps_counter::FPSCounter;
 
 #[allow(non_camel_case_types)]
 type pix_t = i32;
@@ -187,18 +188,18 @@ impl Game {
 	fn render<B: BackEnd<I>, I: ImageSize>(&self, c: Context, g: &mut B) {
 		let w = self.block_width as f64;
 		// Draw top wall
-		for (i, h) in self.cave_top.iter().enumerate() {
+		for (i, &h) in self.cave_top.iter().enumerate() {
 			c.rect(w*i as f64, 0.0,
-				w, w**h as f64 + w).rgb(0.0, 0.0, 0.0).draw(g);
+				w, w*h as f64 + w).rgb(0.0, 0.0, 0.0).draw(g);
 		};
 		// Draw bottom wall
-		for (i, h) in self.cave_bottom.iter().enumerate() {
-			c.rect(w*i as f64, w**h as f64, w,
-				self.size[1] as f64 - w**h as f64).rgb(0., 0., 0.).draw(g);
+		for (i, &h) in self.cave_bottom.iter().enumerate() {
+			c.rect(w*i as f64, w*h as f64, w,
+				self.size[1] as f64 - w*h as f64).rgb(0., 0., 0.).draw(g);
 		};
 		// Draw worm
-		for (i, h) in self.worm_height.iter().enumerate() {
-			c.rect(w*i as f64, w**h as f64, w, w).rgb(0., 0., 0.).draw(g);
+		for (i, &h) in self.worm_height.iter().enumerate() {
+			c.rect(w*i as f64, w*h as f64, w, w).rgb(0., 0., 0.).draw(g);
 		}
 	}
 
@@ -255,7 +256,7 @@ fn main() {
     // Some settings for how the game should be run.
     let event_settings = EventSettings {
         updates_per_second: 60,
-        max_frames_per_second: 30
+        max_frames_per_second: 60
     };
 
     // Set up Gfx-SDL2 device nonsense. Better than opengl_graphics, but
@@ -273,8 +274,15 @@ fn main() {
     // Create a piston::graphics interface.
     let mut g2d = G2D::new(&mut device);
 
+    let show_fps = true;
+    let mut fps_counter = FPSCounter::new();
     // Create GameIterator to begin the event iteration loop.
-    for e in EventIterator::new(&mut window, &event_settings) {
+    let mut event_iter = EventIterator::new(&mut window, &event_settings);
+    loop {
+        let e = match event_iter.next() {
+            None => { break; }
+            Some(e) => e
+        };
     	e.render(|_| {
     		// Draw using the piston Context
     		g2d.draw(&mut renderer, &frame, |c, g| {
@@ -285,6 +293,10 @@ fn main() {
     		// Draw to Gfx, which draws to SDL window.
     		device.submit(renderer.as_buffer());
     		renderer.reset();
+
+            if show_fps {
+                event_iter.window.window.set_title(format!("Gravity worm FPS {}", fps_counter.tick()).as_slice());
+            }
     	});
         e.update(|args| {
         	game.update_dt(args.dt)
