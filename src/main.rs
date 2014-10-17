@@ -130,6 +130,7 @@ impl Game {
 		*self.cave_bottom.last().unwrap() >= self.cave_height as pix_t - 1
 	}
 
+	/// Advance every 1/16th of a second.
 	/// WARNING: Vec::remove is O(n)! Should use circular data structure
 	fn update_dt(&mut self, dt: f64) {
 		match self.status {
@@ -204,15 +205,8 @@ impl Game {
 	}
 
 	fn press_btn(&mut self, button: Button) {
-		match button {
-        	Keyboard(key) => {
-        		if key == keyboard::Space {
-        			match self.status {
-        				During => self.worm_dir = Up,
-        				_ => ()
-        			}
-        		}
-        	},
+		match (button, self.status) {
+        	(Keyboard(keyboard::Space), During) => self.worm_dir = Up,
         	_ => ()
         }
 	}
