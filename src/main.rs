@@ -191,16 +191,16 @@ impl Game {
 		// Draw top wall
 		for (i, &h) in self.cave_top.iter().enumerate() {
 			c.rect(w*i as f64, 0.0,
-				w, w*h as f64 + w).rgb(0.0, 0.0, 0.0).draw(g);
+				w, w*h as f64 + w).rgb(130.0/255.0, 148.0/255.0, 150.0/255.0).draw(g);
 		};
 		// Draw bottom wall
 		for (i, &h) in self.cave_bottom.iter().enumerate() {
 			c.rect(w*i as f64, w*h as f64, w,
-				self.size[1] as f64 - w*h as f64).rgb(0., 0., 0.).draw(g);
+				self.size[1] as f64 - w*h as f64).rgb(130.0/255.0, 148.0/255.0, 150.0/255.0).draw(g);
 		};
 		// Draw worm
 		for (i, &h) in self.worm_height.iter().enumerate() {
-			c.rect(w*i as f64, w*h as f64, w, w).rgb(0., 0., 0.).draw(g);
+			c.rect(w*i as f64, w*h as f64, w, w).rgb(116.0/255.0, 123.0/255.0, 139.0/255.0).draw(g);
 		}
 	}
 
@@ -280,7 +280,7 @@ fn main() {
     	e.render(|_| {
     		// Draw using the piston Context
     		g2d.draw(&mut renderer, &frame, |c, g| {
-    			c.rgb(1.0, 1.0, 1.0).draw(g);
+    			c.rgb(253.0/255.0, 246.0/255.0, 229.0/255.0).draw(g);
     			game.render(c, g);
     		});
 
