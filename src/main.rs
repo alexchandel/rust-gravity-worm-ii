@@ -354,7 +354,9 @@ fn main() {
     		renderer.reset();
 
             if show_fps {
-                event_iter.window.window.set_title(format!("Gravity worm FPS {}", fps_counter.tick()).as_slice());
+                event_iter.window.window.set_title(format!("Gravity worm FPS {} Score {}",
+                                                           fps_counter.tick(),
+                                                           game.score).as_slice());
             }
     	});
         e.update(|args| {
