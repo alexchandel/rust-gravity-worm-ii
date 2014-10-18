@@ -32,6 +32,8 @@ use piston::graphics::{
 	Context,
     Draw
 };
+use piston::graphics::internal::Color;
+
 use piston::input::{
 	Button,
 	Keyboard,
@@ -71,7 +73,7 @@ struct Game {
 	// worm_len: uint,
 	pub cave_top: Vec<pix_t>,
 	pub cave_bottom: Vec<pix_t>,
-	pub worm_height: Vec<f64>,
+	pub worm_height: Vec<(f64, Color)>,
 	cave_dir: Direction,
 	worm_dir: Direction,
 	worm_vel: pix_t,
@@ -79,6 +81,22 @@ struct Game {
 	score: i64,
 	dt: f64,
 	status: Status
+}
+
+static WORM_COLOR_MAX: Color = [0.0/255.0, 255.0/255.0, 255.0/255.0, 1.0];
+static WORM_COLOR_MIN: Color = [0.0/255.0, 0.0/255.0, 0.0/255.0, 1.0];
+
+fn color_lerp(x: Color, y: Color, a: f32) -> Color {
+    let a_clamped = match a {
+        a if a < 0.0 => 0.0,
+        a if a > 1.0 => 1.0,
+        a => a
+    };
+    let mut result: [f32, ..4u] = [0.0, ..4u];
+    for i in range(0u,4u) {
+        result[i] = x[i] * a_clamped + y[i] * (1.0 - a_clamped);
+    }
+    result
 }
 
 impl Game {
@@ -91,11 +109,11 @@ impl Game {
 
 		let mut cave_top: Vec<pix_t> = Vec::with_capacity(x_blocks);
 		let mut cave_bottom: Vec<pix_t> = Vec::with_capacity(x_blocks);
-		let mut worm_height: Vec<f64> = Vec::with_capacity(x_blocks);
+		let mut worm_height: Vec<(f64, Color)> = Vec::with_capacity(x_blocks);
 
 		cave_top.extend(count(y_blocks as pix_t/8, 0).take(x_blocks));
 		cave_bottom.extend(count(y_blocks as pix_t*7/8, 0).take(x_blocks));
-		worm_height.extend(count(y_blocks as f64/2.0, 0.0).take(worm_len));
+		worm_height.extend(count(y_blocks as f64/2.0, 0.0).take(worm_len).map(|h| (h, color_lerp(WORM_COLOR_MIN, WORM_COLOR_MAX, 0.5))));
 
 		return Game {
 			size: [x, y],
@@ -119,7 +137,7 @@ impl Game {
 
 	fn is_worm_collided(&self) -> bool {
 		let len = self.worm_height.len();
-		let height = self.worm_height[len-1];
+		let height = self.worm_height[len-1].val0();
 		let top = self.cave_top[len-1] as f64 + 1.0;
 		let bottom = self.cave_bottom[len-1] as f64;
 		height < top || height > bottom
@@ -129,6 +147,10 @@ impl Game {
 		*self.cave_top.last().unwrap() <= 0 ||
 		*self.cave_bottom.last().unwrap() >= self.cave_height as pix_t - 1
 	}
+
+    fn get_worm_color(&self) -> Color {
+        color_lerp(WORM_COLOR_MIN, WORM_COLOR_MAX, 0.5 + (self.worm_vel as f32)/32.0)
+    }
 
 	/// Advance every 1/16th of a second.
 	/// WARNING: Vec::remove is O(n)! Should use circular data structure
@@ -168,7 +190,8 @@ impl Game {
 
 					self.worm_height.remove(0);
 					let last = *self.worm_height.last().unwrap();
-					self.worm_height.push(last + self.worm_vel as f64 / 8.0);
+                    let color = self.get_worm_color();
+					self.worm_height.push((last.val0() + self.worm_vel as f64 / 8.0, color));
 
 					if self.is_worm_collided() {
 						println!("DEAD: score = {}\nTap space to restart...",
@@ -199,8 +222,8 @@ impl Game {
 				self.size[1] as f64 - w*h as f64).rgb(130.0/255.0, 148.0/255.0, 150.0/255.0).draw(g);
 		};
 		// Draw worm
-		for (i, &h) in self.worm_height.iter().enumerate() {
-			c.rect(w*i as f64, w*h as f64, w, w).rgb(116.0/255.0, 123.0/255.0, 139.0/255.0).draw(g);
+		for (i, &(h,cl)) in self.worm_height.iter().enumerate() {
+			c.rect(w*i as f64, w*h as f64, w, w).color(cl).draw(g);
 		}
 	}
 
