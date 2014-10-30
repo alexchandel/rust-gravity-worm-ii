@@ -1,4 +1,4 @@
-rust-gravity-worm-ii
+rust-gravity-worm-ii [![Build Status](https://travis-ci.org/alexchandel/rust-gravity-worm-ii.svg?branch=master)](https://travis-ci.org/alexchandel/rust-gravity-worm-ii)
 ====================
 
 A Gravity Worm clone written in Rust, using the Piston game engine. This is my first experiment with Piston, so there are a few issues. Notably, there's no text in the user interface!
