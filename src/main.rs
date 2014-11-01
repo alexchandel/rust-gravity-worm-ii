@@ -2,7 +2,7 @@
 
 extern crate piston;
 extern crate sdl2;
-extern crate sdl2_game_window;
+extern crate sdl2_window;
 extern crate gfx;
 extern crate gfx_graphics;
 
@@ -15,7 +15,7 @@ use piston::{
 	EventSettings,
 	EventIterator,
 };
-use sdl2_game_window::WindowSDL2;
+use sdl2_window::Sdl2Window;
 
 use gfx::{Device, DeviceHelper};
 use gfx_graphics::G2D;
@@ -302,7 +302,7 @@ fn main() {
 	let opengl_version = piston::shader_version::opengl::OpenGL_3_2;
 
 	// Create an SDL2 window.
-    let mut window = WindowSDL2::new(
+    let mut window = Sdl2Window::new(
         opengl_version,
         piston::WindowSettings {
             title: "Gravity worm".to_string(),
