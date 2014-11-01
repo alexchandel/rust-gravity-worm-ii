@@ -5,6 +5,7 @@ extern crate sdl2;
 extern crate sdl2_window;
 extern crate gfx;
 extern crate gfx_graphics;
+extern crate fps_counter;
 
 use std::iter::count;
 use std::rand;
@@ -41,7 +42,8 @@ use piston::input::{
 	Keyboard,
 	keyboard,
 };
-use piston::event::fps_counter::FPSCounter;
+
+use fps_counter::FPSCounter;
 
 #[allow(non_camel_case_types)]
 type pix_t = i32;

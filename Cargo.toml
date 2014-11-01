@@ -25,3 +25,6 @@ git = "https://github.com/gfx-rs/gfx-rs.git"
 
 git = "https://github.com/PistonDevelopers/gfx_graphics.git"
 
+[dependencies.fps_counter]
+
+git = "https://github.com/PistonDevelopers/fps_counter.git"
