@@ -1,4 +1,9 @@
 language: rust
+before_install:
+  - sudo apt-add-repository ppa:zoogie/sdl2-snapshots -y
+  - sudo apt-get update -qq
+install:
+  - sudo apt-get install -qq libsdl2-dev
 script:
   - cargo build --release --verbose
   - cargo test --verbose
