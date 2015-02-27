@@ -13,9 +13,9 @@ git = "https://github.com/pistondevelopers/piston.git"
 
 git = "https://github.com/AngryLawyer/rust-sdl2.git"
 
-[dependencies.sdl2_game_window]
+[dependencies.sdl2_window]
 
-git = "https://github.com/PistonDevelopers/sdl2_game_window.git"
+git = "https://github.com/PistonDevelopers/sdl2_window.git"
 
 [dependencies.gfx]
 
@@ -25,3 +25,6 @@ git = "https://github.com/gfx-rs/gfx-rs.git"
 
 git = "https://github.com/PistonDevelopers/gfx_graphics.git"
 
+[dependencies.fps_counter]
+
+git = "https://github.com/PistonDevelopers/fps_counter.git"

@@ -2,9 +2,10 @@
 
 extern crate piston;
 extern crate sdl2;
-extern crate sdl2_game_window;
+extern crate sdl2_window;
 extern crate gfx;
 extern crate gfx_graphics;
+extern crate fps_counter;
 
 use std::iter::count;
 use std::rand;
@@ -15,7 +16,7 @@ use piston::{
 	EventSettings,
 	EventIterator,
 };
-use sdl2_game_window::WindowSDL2;
+use sdl2_window::Sdl2Window;
 
 use gfx::{Device, DeviceHelper};
 use gfx_graphics::G2D;
@@ -41,7 +42,8 @@ use piston::input::{
 	Keyboard,
 	keyboard,
 };
-use piston::event::fps_counter::FPSCounter;
+
+use fps_counter::FPSCounter;
 
 #[allow(non_camel_case_types)]
 type pix_t = i32;
@@ -302,7 +304,7 @@ fn main() {
 	let opengl_version = piston::shader_version::opengl::OpenGL_3_2;
 
 	// Create an SDL2 window.
-    let mut window = WindowSDL2::new(
+    let mut window = Sdl2Window::new(
         opengl_version,
         piston::WindowSettings {
             title: "Gravity worm".to_string(),
